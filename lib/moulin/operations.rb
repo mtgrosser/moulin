@@ -1,12 +1,6 @@
 module Moulin
   module Operations
     
-    module All
-      def all(options = {})
-        
-      end
-    end
-
     module Create
     end
 
