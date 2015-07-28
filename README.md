@@ -1,12 +1,11 @@
 # Moulin
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/moulin`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+An alternative Ruby wrapper for the Paymill API
+(that does not rely on global configuration variables)
 
 ## Installation
 
-Add this line to your application's Gemfile:
+In your Gemfile:
 
 ```ruby
 gem 'moulin'
@@ -16,24 +15,15 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install moulin
-
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+paymill = Moulin::API.new('your private API key here')
 
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release` to create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-1. Fork it ( https://github.com/[my-github-username]/moulin/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+paymill.find_payment('pay_42d88a4ae4d7b766eab02ce8')
+=> #<Moulin::Payment @attributes={"id"=>"pay_42d88a4ae4d7b766eab02ce8", "type"=>"creditcard",
+    "client"=>nil, "card_type"=>"visa", "country"=>"DE", "bin"=>"411111", "expire_month"=>"12",
+    "expire_year"=>"2015", "card_holder"=>"", "last4"=>"1111", "updated_at"=>1424367668,
+    "created_at"=>1424367668, "app_id"=>nil, "is_recurring"=>true,
+    "is_usable_for_preauthorization"=>true}>
+```
