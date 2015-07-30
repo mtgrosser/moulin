@@ -6,6 +6,6 @@ module Moulin
                :iban, :bic
        
   
-    # base + delete
+    destroyable
   end
 end

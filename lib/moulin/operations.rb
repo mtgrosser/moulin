@@ -1,16 +1,17 @@
 module Moulin
   module Operations
     
-    module Create
+    module Update
+      def update(attrs = nil)
+        self.attributes = attrs if attrs
+        api.update(self)
+      end
     end
 
-    module Find
-    end
-    
-    module Update
-    end
-    
-    module Delete
+    module Destroy
+      def destroy
+        api.destroy(self)
+      end
     end
     
   end

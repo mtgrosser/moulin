@@ -15,10 +15,17 @@ module Moulin
         end
       end
       
-      def operations(*args)
+      def updatable
+        include Operations::Update
+      end
+      
+      def destroyable
+        include Operations::Destroy
       end
       
     end
+    
+    attribute :id
     
     def initialize(api, attrs = {})
       raise ArgumentError, "#{api.inspect} is not a Moulin::API" unless api.is_a?(API)
@@ -44,11 +51,19 @@ module Moulin
       @attributes ||= {}
     end
     
+    #def persisted?
+    #  id && id != '' && id != 0
+    #end
+        
     def inspect
       "#<#{self.class} @attributes=#{@attributes.inspect}>"
     end
     
     private
+    
+    def api
+      @api
+    end
     
     def read_attribute(attr)
       attributes[attr.to_s]

@@ -1,49 +1,49 @@
 module Moulin
   class API
     
-    API_BASE      = 'api.paymill.com'
+    API_HOST      = 'api.paymill.com'
     API_VERSION   = 'v2'
     API_PORT      = 443
     
-    attr_reader :key, :base, :version, :port
+    attr_reader :key, :host, :port, :version
     
     def initialize(key, options = {})
       @key = key
-      @base = options[:base] || API_BASE
-      @version = options[:version] || API_VERSION
+      @host = options[:host] || API_HOST
       @port = options[:port] || API_PORT
+      @version = options[:version] || API_VERSION
     end
     
-    def delete(klass, id)
-      delete klass.api_path(id)
-    end
-
-    def update(instance, attributes)
-      assign instance, put(klass.api_path(instance.id), attributes)
+    def destroy(base)
+      delete base.class.api_path(base.id)
     end
     
-    def new_payment(attrs = {})
-      Payment.new(self, attrs)
+    def update(base)
+      assign base, put(base.class.api_path(base.id), base.attributes)
     end
     
-    def payments(options)
-      all(Payment, options)
+    def create_payment(attrs = {})
+      create Payment, attrs
+    end
+    
+    def payments(options = {})
+      all Payment, options
     end
     
     def find_payment(id)
-      find(Payment, id)
+      find Payment, id
     end
     
-    def new_transaction(attrs = {})
-      build Transaction, attrs
+    def create_transaction(attrs = {})
+      create Transaction, attrs
     end
     
-    def transactions(options)
-      all(Transaction, options)
+    def transactions(options = {})
+      all Transaction, options
     end
     
     def find_transaction(id)
-      find(Transaction, id)
+      find Transaction, id
     end
     
     private
@@ -98,14 +98,14 @@ module Moulin
     
     def https
       return @https if @https
-      @https = Net::HTTP.new(base, port)
+      @https = Net::HTTP.new(host, port)
       @https.use_ssl = true
       @https
     end
     
     def execute(request)
       response = https.start { |https| https.request(request) }
-      # log_request_info(response)
+      log_response(response)
       raise AuthenticationError if 401 == response.code.to_i
       raise APIError if response.code.to_i >= 500
       payload = JSON.parse(response.body)
@@ -115,7 +115,11 @@ module Moulin
     
     def api_url(path, params = nil)
       encoded_params = "?#{URI.encode_www_form(params)}" if params && !params.empty?
-      "https://#{base}/#{version}/#{path}#{encoded_params}"
+      "https://#{host}/#{version}/#{path}#{encoded_params}"
+    end
+    
+    def log_response(response)
+      puts response.inspect
     end
     
   end
