@@ -1,9 +1,9 @@
 module Moulin
   class API
     
-    API_HOST      = 'api.paymill.com'
-    API_VERSION   = 'v2'
-    API_PORT      = 443
+    API_HOST    = 'api.paymill.com'
+    API_VERSION = 'v2'
+    API_PORT    = 443
     
     attr_reader :key, :host, :port, :version
     
